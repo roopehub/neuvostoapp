@@ -3,7 +3,7 @@
 
 $(document).on('ready', function() {
  
-var battletags = ["RobTheHatter-2816","MixeeD-2884", "Noa-2638", "BattlePants-23584", "UncleSKAM-2913", "Steak-21636", "RebelByte-2844", "Scytze-2484", "BR22ZNIK-2363", "Forssakengod-2172"], accounts = [];    
+var battletags = ["RobTheHatter-2816","MixeeD-2884", "Noa-2638", "BattlePants-23584", "UncleSKAM-2913", "Steak-21636", "RebelByte-2844", "Scytze-2484", "BR22ZNIK-2363", "Forssakengod-2172", "Santeri-2991"], accounts = [];    
     
 function Person(name, rank, avatar, rankimg) {
     this.name = name;
