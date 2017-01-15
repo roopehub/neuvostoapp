@@ -5,11 +5,13 @@ $(document).on('ready', function() {
  
 var battletags = ["RobTheHatter-2816","MixeeD-2884", "Noa-2638", "BattlePants-23584", "UncleSKAM-2913", "Steak-21636", "RebelByte-2844", "Scytze-2484", "BR22ZNIK-2363", "Forssakengod-2172", "Santeri-2991"], accounts = [];    
     
-function Person(name, rank, avatar, rankimg) {
+function Person(name, rank, avatar, rankimg, played, winpercent) {
     this.name = name;
     this.rank = rank;
     this.avatar = avatar;
     this.rankimg = rankimg;
+    this.played = played;
+    this.winpercent = winpercent;
 }
     
     function removeLoading() {
@@ -60,7 +62,9 @@ function Person(name, rank, avatar, rankimg) {
                   "<td><h2>" + (ind+1) + ". " + "</h2></td>" +
                   "<td><h3>" + player.name + "</h3><td>" +
                   "<td><h4 id='rank'>" + player.rank + "</h4></td>" +
-                  "<td><img src=" + player.rankimg + " class='rankimg'></td>" +
+                  "<td><img src=" + player.rankimg + " class='rankimg'/></td>" +
+                  "<td><h3>" + player.played + "</h3></td>" +
+                  "<td><h3>" + player.winpercent + "%</h3></td>" +
                   "</tr>" 
                 )
         });
@@ -75,13 +79,16 @@ function getAjax(printPlayers) {
         $.get('https://api.lootbox.eu/pc/eu/'+ battletag +'/profile', function(data, status) {
                 console.log("status for " + battletag + " is: " + status);
             if(data){
-                if(Number(data.data.competitive.rank) > 0) {
+                console.log(data);
+                var played_games = data.data.games.competitive.played ? data.data.games.competitive.played : 0 ;
+                var winpercent = played_games > 0 ? Number((data.data.games.competitive.wins / played_games) * 100).toFixed(2) : 0 ;
+                    if(Number(data.data.competitive.rank) > 0) {
                     var newPerson = new Person(data.data.username, Number(data.data.competitive.rank),
-                                               data.data.avatar, data.data.competitive.rank_img);
+                                               data.data.avatar, data.data.competitive.rank_img, played_games, winpercent );
                 } 
                 else {
                     var newPerson = new Person(data.data.username, Number(data.data.competitive.rank),
-                                               data.data.avatar, "https://imgflip.com/s/meme/Derp.jpg");
+                                               data.data.avatar, "https://imgflip.com/s/meme/Derp.jpg", played_games, winpercent);
                 }
                 accounts.push(newPerson);
             }
