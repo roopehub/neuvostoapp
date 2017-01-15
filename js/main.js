@@ -1,8 +1,9 @@
+(function(){
 'use strict'; 
 
 $(document).on('ready', function() {
  
-var battletags = ["RobTheHatter-2816","MixeeD-2884", "BattlePants-23584", "UncleSKAM-2913", "Scytze-2484", "BR22ZNIK-2363"], accounts = [];    
+var battletags = ["RobTheHatter-2816","MixeeD-2884", "Noa-2638", "BattlePants-23584", "UncleSKAM-2913", "Steak-21636", "RebelByte-2844", "Scytze-2484", "BR22ZNIK-2363", "Forssakengod-2172"], accounts = [];    
     
 function Person(name, rank, avatar, rankimg) {
     this.name = name;
@@ -15,19 +16,30 @@ function Person(name, rank, avatar, rankimg) {
        $(".loader").hide();
     }
     
+    function showSlowInfoToast() {
+          $(".slowbroInfoToast").delay(5000).slideDown(2000).delay(4000).slideUp(1000);
+    }
+    
+    /*give the three*/
     function victoriousTopThree() {
         var myTable = document.getElementById('resultTable');
-        var winner =  myTable.rows[1];
-        var second =  myTable.rows[2];
-        var third =  myTable.rows[3];
-        winner.style.color = "#baa400";
-        winner.style.fontSize = "35px";
         
-        second.style.color = "#c9c3bd";
-        second.style.fontSize = "30px";
-        
-        third.style.color = "#995a23";
-        third.style.fontSize = "25px";
+        for(let i=1 ; i < 4 ; i++) {
+            console.log(i);
+            switch(i) {
+                case 1:
+                    myTable.rows[i].style.color = "#baa400";
+                    myTable.rows[i].style.fontSize = "35px";
+                break;
+                case 2:
+                    myTable.rows[i].style.color = "#7f8082";
+                break;
+                case 3:
+                    myTable.rows[i].style.color = "#995a23";
+                default:
+                    console.log("crowned all the victors");
+            }
+        }
     }
         
     var printPlayers = function(){
@@ -43,23 +55,33 @@ function Person(name, rank, avatar, rankimg) {
         
         $.each(accounts, function(ind, player){
               $("#resultTable > tbody").append(
-                "<tr> <td><img src=" + player.avatar + " class='avatar'></td> <td><h2>" + (ind+1) + ". " + "</h2></td> <td><h3>" + player.name + "</h3><td> <td><h4 id='rank'>" + player.rank + "</h4></td> <td><img src=" + player.rankimg + " class='rankimg'></td> </tr>" 
+                "<tr>" +
+                  "<td><img src=" + player.avatar + " class='avatar'></td>" +
+                  "<td><h2>" + (ind+1) + ". " + "</h2></td>" +
+                  "<td><h3>" + player.name + "</h3><td>" +
+                  "<td><h4 id='rank'>" + player.rank + "</h4></td>" +
+                  "<td><img src=" + player.rankimg + " class='rankimg'></td>" +
+                  "</tr>" 
                 )
         });
         
         victoriousTopThree();
     };
-    
+ 
+/* start of the script */
 function getAjax(printPlayers) {
-    
+    /*the ajax call that is called upon each item in the battletags -list*/
     function getInfo(battletag) {
         $.get('https://api.lootbox.eu/pc/eu/'+ battletag +'/profile', function(data, status) {
                 console.log("status for " + battletag + " is: " + status);
             if(data){
-                if(data.data.competitive.rank > 0) {
-                    var newPerson = new Person(data.data.username, Number(data.data.competitive.rank), data.data.avatar, data.data.competitive.rank_img);
-                } else {
-                    var newPerson = new Person(data.data.username, Number(data.data.competitive.rank),  data.data.avatar, "https://static-cdn.jtvnw.net/jtv_user_pictures/arandomderp-profile_image-26296c81ee70cb4f-300x300.png");
+                if(Number(data.data.competitive.rank) > 0) {
+                    var newPerson = new Person(data.data.username, Number(data.data.competitive.rank),
+                                               data.data.avatar, data.data.competitive.rank_img);
+                } 
+                else {
+                    var newPerson = new Person(data.data.username, Number(data.data.competitive.rank),
+                                               data.data.avatar, "https://imgflip.com/s/meme/Derp.jpg");
                 }
                 accounts.push(newPerson);
             }
@@ -70,18 +92,23 @@ function getAjax(printPlayers) {
         });
     } 
     
+    //show the info toast 
+    showSlowInfoToast();
+    
+    /*do a ajax call to each item in battletags -list*/
     $.each(battletags, function(ind, battletag) {
         getInfo(battletag); 
     });
 }
-    
+
+/*wait until all Ajax calls are made then print the results*/
 $( document ).ajaxStop(function() {
   printPlayers();
 });    
 
-    
+/* Trigger the script */
 getAjax();
-    
     
 }); 
 
+})();

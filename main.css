@@ -23,7 +23,7 @@ html, body {
     border-radius: 50%;
     width: 120px;
     height: 120px;
-    animation: spin 3s linear infinite;
+    animation: spin 1s linear infinite;
     margin-top: 10%;
 }
 
@@ -63,14 +63,29 @@ html, body {
     padding: 20px;
 }
 
+.slowbroInfoToast {
+    display: none;
+    background-color: #20bc4f;
+    width: 25%;
+    padding: 25px;
+    top:0;
+    position: absolute;
+    margin-top: 12em;
+}
+
+.slowbroInfoToast p {
+  color: #feffff;
+}
+
 
 /*nav styles*/
 .navbar-static-top {
     left: 0;
     width: 100%;
-    height: 8em;
+    height: 12em;
     background: url('https://images4.alphacoders.com/553/553496.jpg') no-repeat 50%;
     background-size: cover;
+    box-shadow: 0 4px 2px -2px gray;
 }
 
 /* FOOTER */
